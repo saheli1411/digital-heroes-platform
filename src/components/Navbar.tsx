@@ -213,7 +213,7 @@ export default function Navbar() {
             ) : (
               <div className="flex flex-col gap-2">
                 <NextLink
-                  href="/dashboard"
+                  href="/login"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full text-center p-3 rounded-xl bg-slate-900 border border-slate-800 text-sm font-semibold text-white"
                 >

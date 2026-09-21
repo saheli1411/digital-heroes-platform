@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { submitScore, deleteScore } from '@/app/actions/scores';
 import { createClient } from '@/lib/supabase/client';
 import { Trophy, Award, Calendar, CheckCircle2, Upload, AlertCircle } from 'lucide-react';
@@ -16,10 +17,14 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
 
-  const loadDashboardData = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
+  // inside the component:
+const router = useRouter();
+const loadDashboardData = async () => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    router.push('/login'); // Redirect guests to login
+    return;
+  }
     const { data: prof } = await supabase.from('profiles').select('*, charities(name)').eq('id', user.id).single();
     setProfile(prof);
     if (prof?.charity_percentage) setCharityPercent(Number(prof.charity_percentage));
